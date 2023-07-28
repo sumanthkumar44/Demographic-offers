@@ -1,26 +1,22 @@
 package Customer.Demographicoffers.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Document("DemographicsRegistration")
-public class  DemographicsRegistrationModel {
-    @Id
+public class RegistrationDto {
     private String demographicId;
     private String postCode;
     private String cin;
     private String consentId;
+    private String CASConsentId;
     private boolean isGPSOffersAccepted;
     private boolean isDemographicOfferAccepted;
-
-
+    private List<String> permissionsList;
+    private final String consentType="DEM";
 }

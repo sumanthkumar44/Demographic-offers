@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://sumanth:dbPwd@cluster0.jghdd2b.mongodb.net/?retryWrites=true&w=majority
+      database: DemographicsDB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  port : 9090

@@ -1,18 +1,23 @@
 package Customer.Demographicoffers.controller;
 
+import Customer.Demographicoffers.model.DemographicsRegistrationModel;
+import Customer.Demographicoffers.model.RegistrationDto;
 import Customer.Demographicoffers.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
+@RequestMapping("/register")
 public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
-    public ResponseEntity register()
+    @PostMapping
+    public ResponseEntity register(@RequestBody RegistrationDto registrationDto)
     {
-        return null;
+        return registrationService.register(registrationDto);
     }
 }
