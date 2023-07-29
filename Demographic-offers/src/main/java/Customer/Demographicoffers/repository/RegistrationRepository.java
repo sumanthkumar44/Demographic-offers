@@ -10,5 +10,8 @@ import java.util.List;
 public interface RegistrationRepository extends MongoRepository<DemographicsRegistrationModel,String> {
     DemographicsRegistrationModel save(DemographicsRegistrationModel demographicsRegistrationModel);
     List<DemographicsRegistrationModel> findByCin(String cin);
+   // DemographicsRegistrationModel update(DemographicsRegistrationModel demographicsRegistrationModel);
+
+
 
 }

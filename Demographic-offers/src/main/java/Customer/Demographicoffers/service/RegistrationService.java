@@ -6,31 +6,26 @@ import Customer.Demographicoffers.model.DemographicsRegistrationModel;
 import Customer.Demographicoffers.model.RegistrationDto;
 import Customer.Demographicoffers.repository.RegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
 public class RegistrationService {
     @Autowired
     RegistrationRepository registrationRepository;
-    private final URI CONSENT_BASE_URI= URI.create("http://localhost:8080/consent");
+    private final String CONSENT_BASE_URI= "http://localhost:8080";
     @Autowired
     RestTemplate restTemplate;
     public ResponseEntity register(RegistrationDto registrationDto){
-        ConsentModel consentModel= ConsentModel.builder()
-                .payload(registrationDto.getPermissionsList())
-                .cin(registrationDto.getCin())
-                .build();
 
-        String consentId= createConsent(consentModel);
         DemographicsRegistrationModel demographicsRegistrationModel = DemographicsRegistrationModel.builder()
                 .cin(registrationDto.getCin())
-                .consentId(consentId)
+                .consentId(createConsent(registrationDto))
                 .isDemographicOfferAccepted(registrationDto.isDemographicOfferAccepted())
                 .isGPSOffersAccepted(registrationDto.isGPSOffersAccepted())
                 .postCode(getAddress(registrationDto.getCin()))
@@ -40,16 +35,30 @@ public class RegistrationService {
 
         return new ResponseEntity(HttpStatus.CREATED);
     }
-    //this method acts as a cas service which creates a
-    private String createConsent(ConsentModel consentModel)
+    private String createConsent(RegistrationDto registrationDto)
     {
-        ConsentModel response= restTemplate.postForObject(CONSENT_BASE_URI,consentModel,ConsentModel.class);
+        ConsentModel consentModel= ConsentModel.builder()
+                .payload(registrationDto.getPermissionsList())
+                .cin(registrationDto.getCin())
+                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity entity = new HttpEntity(consentModel ,headers);
+        //restTemplate.put(uRL, entity);
+
+        ConsentModel response= restTemplate.postForObject(CONSENT_BASE_URI+"/consent",entity,ConsentModel.class);
         return response.getConsentId();
 
     }
     private String getAddress(String cin)
     {
-        Address address= restTemplate.postForObject(CONSENT_BASE_URI,cin,Address.class);
-        return address.getPostCode();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity entity = new HttpEntity(headers);
+        ResponseEntity<Address> address= restTemplate.exchange(CONSENT_BASE_URI+"/CDNA/"+cin,HttpMethod.GET,entity,Address.class);
+        return address.getBody().getPostCode();
     }
+
 }
