@@ -1,6 +1,8 @@
 package Customer.Demographicoffers.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,9 +13,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("DemographicsOffersModel")
+@Builder
+@Document("DemographicsOffers")
 public class DemographicsOffersModel {
     @Id
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private String offerId;
     private String subject;
     private String URL;
     private String description;
@@ -21,4 +26,6 @@ public class DemographicsOffersModel {
     private List<String> cities;
     private List<String> countries;
     private String retailerId;
+    private String latitude;
+    private String longitude;
 }

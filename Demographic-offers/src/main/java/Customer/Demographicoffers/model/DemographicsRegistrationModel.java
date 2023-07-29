@@ -21,6 +21,7 @@ public class  DemographicsRegistrationModel {
     private String consentId;
     private boolean isGPSOffersAccepted;
     private boolean isDemographicOfferAccepted;
+    private String city;
 
 
 }
