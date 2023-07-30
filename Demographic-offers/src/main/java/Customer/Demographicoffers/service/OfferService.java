@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -67,9 +68,14 @@ public class OfferService {
            log.info("response for consent validation-->"+response.toString());
         if(response.getStatusCode().is2xxSuccessful())// if it's 2XX thinking as valid consent present
         {
-            EventModel requestBody=  EventModel.builder().payload(demographicsOffersModel).build();
-            ResponseEntity eventResponse=restTemplate.postForEntity(CONSENT_BASE_URI+"/event/",new HttpEntity(requestBody,headers),Void.class);
-            log.info("event sent to Event MS"+eventResponse.getStatusCode());
+            new PermissionConstants();
+           Optional value= response.getBody().getPayload().stream().filter(
+                    permission->PermissionConstants.PERMISSION_TO_READ_ADDRESS.equalsIgnoreCase(permission)).findFirst();
+           if(value.isPresent()) {
+               EventModel requestBody = EventModel.builder().payload(demographicsOffersModel).build();
+               ResponseEntity eventResponse = restTemplate.postForEntity(CONSENT_BASE_URI + "/event/", new HttpEntity(requestBody, headers), Void.class);
+               log.info("event sent to Event MS" + eventResponse.getStatusCode());
+           }
         }
         }
 

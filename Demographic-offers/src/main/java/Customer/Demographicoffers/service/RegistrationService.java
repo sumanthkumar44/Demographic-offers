@@ -30,8 +30,6 @@ public class RegistrationService {
         DemographicsRegistrationModel demographicsRegistrationModel = DemographicsRegistrationModel.builder()
                 .cin(registrationDto.getCin())
                 .consentId(consentId)
-                .isDemographicOfferAccepted(registrationDto.isDemographicOfferAccepted())
-                .isGPSOffersAccepted(registrationDto.isGPSOffersAccepted())
                 .postCode(address.getPostCode())
                 .city(address.getCity())
                 .demographicId(UUID.randomUUID().toString())

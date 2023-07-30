@@ -1,5 +1,6 @@
 package Customer.Demographicoffers.service;
 
+import Customer.Demographicoffers.helper.ResourceNotFoundException;
 import Customer.Demographicoffers.model.ConsentModel;
 import Customer.Demographicoffers.model.DemographicsOffersModel;
 import Customer.Demographicoffers.model.DemographicsRegistrationModel;
@@ -31,17 +32,21 @@ public class GPSOfferService {
         {
            return new ResponseEntity<>(offersRepository.findByPostcode(getPostcode(latitude, longitude)),HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else
+            throw new ResourceNotFoundException("Customer with this CIN is not registered for this service");
+
     }
     private boolean hasValidConsent(String cin)
     {
         DemographicsRegistrationModel demographicsRegistrationModel= registrationRepository.findByCin(cin);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        ResponseEntity<ConsentModel> response= restTemplate.exchange(CONSENT_BASE_URI+"/consent/"+demographicsRegistrationModel.getConsentId(),HttpMethod.GET,new HttpEntity(headers),ConsentModel.class);
-        log.info("response for consent validation-->"+response.toString());
-        if (response.getStatusCode().is2xxSuccessful()){
-            return true;
+        if(demographicsRegistrationModel!=null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            ResponseEntity<ConsentModel> response = restTemplate.exchange(CONSENT_BASE_URI + "/consent/" + demographicsRegistrationModel.getConsentId(), HttpMethod.GET, new HttpEntity(headers), ConsentModel.class);
+            log.info("response for consent validation-->" + response.toString());
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return true;
+            }
         }
 
         return false;

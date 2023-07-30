@@ -20,8 +20,6 @@ public class RegistrationDto {
     private String cin;
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String consentId;
-    private boolean isGPSOffersAccepted;
-    private boolean isDemographicOfferAccepted;
     private List<String> permissionsList;
     private final String consentType="DEM";
 }
