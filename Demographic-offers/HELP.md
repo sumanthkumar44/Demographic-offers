@@ -1,8 +1,9 @@
 # Read Me First
  API to provide offers based on customer demographics
+* Need to whitelist IP in mongoDB atlas cluster for running the APP locally
+    Following are different flows
 * Swagger-->  http://localhost:9090/swagger-ui/index.html
 
-Following are different flows
 * Registration
 * Offers/Events based on customer address
 * Offers based on customer GPS location
