@@ -1,7 +1,11 @@
 # Read Me First
-The following was discovered as part of building this project:
+ API to provide offers based on customer demographics
+* Swagger-->  http://localhost:9090/swagger-ui/index.html
 
-* The original package name 'Customer.Demographic-offers' is invalid and this project uses 'Customer.Demographicoffers' instead.
+Following are different flows
+* Registration
+* Offers/Events based on customer address
+* Offers based on customer GPS location
 
 # Getting Started
 
